@@ -170,7 +170,7 @@
       <a href="#">Sewa</a>
       <a href="#">Pembayaran</a>
       <a href="#">Pengeluaran</a>
-      <a href="#">Logout</a>
+      <a href="{{ route('logout') }}">Logout</a>
     </div>
   </div>
 

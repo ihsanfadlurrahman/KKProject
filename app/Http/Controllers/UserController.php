@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -16,22 +17,24 @@ class UserController extends Controller
     public function login(Request $request)
     {
 
-        // User::create([
-        //     'username' => $request->username,
-        //     'password' => Hash::make($request->password),
-        // ]);
-        $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
+        $credentials = $request->validate([
+            'username' => 'required',
+            'password' => 'required'
+        ], [
+            'username.required' => 'Username wajib diisi',
+            'password.required' => 'Password wajib diisi'
         ]);
 
-        $username = $request->input('username');
-        $password = $request->input('password');
-
-        if ($username === 'admin' && $password === 'admin123') {
-            return redirect()->route('dashboard');
-        } else {
-            return back()->withErrors(['login_error' => 'Invalid username or password.'])->withInput();
+        if (Auth::attempt(['username' => $credentials['username'], 'password' => $credentials['password']])) {
+            return redirect()->intended('welcome')->with('success', "Selamat Datang");
         }
+
+        return redirect()->back()->with('error', "Username atau password salah!");
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect('/');
     }
 }

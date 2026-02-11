@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <title>Login | Sistem Kios & Kontrakan</title>
@@ -24,7 +25,7 @@
             width: 360px;
             padding: 30px;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
 
         .login-box h2 {
@@ -88,30 +89,44 @@
         }
     </style>
 </head>
+
 <body>
 
-<div class="login-box">
-    <h2>Login Admin</h2>
-    <p>Sistem Pendataan Kios & Kontrakan</p>
+    <div class="login-box">
+        <h2>Login Admin</h2>
+        <p>Sistem Pendataan Kios & Kontrakan</p>
 
-    <form>
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Masukkan username">
+        <form method="POST" action="{{ route('login') }}" enctype="multipart/form-data">
+            @csrf
+            @if (session('sukses'))
+                <div class="alert alert-success">
+                    {{ session('sukses') }}
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
+            <div class="form-group">
+                <label for="inputUsername">Username</label>
+                <input type="text" name="username" placeholder="Masukkan username" id="inputUsername">
+            </div>
+
+            <div class="form-group">
+                <label for="inputPassword">Password</label>
+                <input type="password" name="password" placeholder="Masukkan password" id="inputPassword">
+            </div>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="footer-text">
+            © 2026 Sistem Internal
         </div>
-
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Masukkan password">
-        </div>
-
-        <button type="submit">Login</button>
-    </form>
-
-    <div class="footer-text">
-        © 2026 Sistem Internal
     </div>
-</div>
 
 </body>
+
 </html>
