@@ -1,4 +1,18 @@
+<!-- SIDEBAR -->
 <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <div class="menu">
+        <a href="#" class="active">Dashboard</a>
+        <a href="#">Unit</a>
+        <a href="#">Penyewa</a>
+        <a href="#">Sewa</a>
+        <a href="#">Pembayaran</a>
+        <a href="#">Pengeluaran</a>
+        <a href="{{ route('logout') }}">Logout</a>
+    </div>
+</div>
+
+{{-- <div class="sidebar">
     <h2>Admin Panel</h2>
 
     <div class="menu">
@@ -37,4 +51,4 @@
             @csrf
         </form>
     </div>
-</div>
+</div> --}}

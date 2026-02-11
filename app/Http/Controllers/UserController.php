@@ -26,11 +26,16 @@ class UserController extends Controller
         ]);
 
         if (Auth::attempt(['username' => $credentials['username'], 'password' => $credentials['password']])) {
-            return redirect()->intended('welcome')->with('success', "Selamat Datang");
+            return redirect()->intended('dashboard')->with('success', "Selamat Datang");
         }
 
         return redirect()->back()->with('error', "Username atau password salah!");
     }
+
+    // public function dashboard()
+    // {
+    //     return view('dashboard.index');
+    // }
 
     public function logout(Request $request)
     {

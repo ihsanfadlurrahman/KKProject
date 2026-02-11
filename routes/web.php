@@ -18,6 +18,10 @@ Route::get('/',[UserController::class, 'index'])->name('login');
 Route::post('/', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::get('/welcome', function () {
-    return view('welcome');
+// Route::middleware(['guest'])->group(function () {
+//     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+// });
+
+Route::get('/dashboard', function () {
+    return view('dashboard.index');
 });
