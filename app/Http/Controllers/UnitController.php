@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
 class UnitController extends Controller
@@ -11,7 +12,8 @@ class UnitController extends Controller
      */
     public function index()
     {
-        //
+        $units = Unit::all();
+        return view('unit.index', compact('units'));
     }
 
     /**
@@ -19,7 +21,7 @@ class UnitController extends Controller
      */
     public function create()
     {
-        //
+        return view('unit.create');
     }
 
     /**
@@ -27,7 +29,22 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 1️⃣ Validasi
+        $validated = $request->validate([
+            'nama_unit'   => 'required|string|max:100',
+            'tipe'        => 'required|in:kios,kontrakan',
+            'harga_sewa'  => 'required|numeric|min:0',
+            'status'      => 'required|in:kosong,disewa',
+            'keterangan'  => 'nullable|string|max:255',
+        ]);
+
+        // 2️⃣ Simpan ke database
+        Unit::create($validated);
+
+        // 3️⃣ Redirect + flash message
+        return redirect()
+            ->route('units.index')
+            ->with('success', 'Unit berhasil ditambahkan.');
     }
 
     /**
@@ -41,9 +58,9 @@ class UnitController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Unit $unit)
     {
-        //
+        return view('unit.edit', compact('unit'));
     }
 
     /**
@@ -51,7 +68,20 @@ class UnitController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'nama_unit'   => 'required|string|max:100',
+            'tipe'        => 'required|in:kios,kontrakan',
+            'harga_sewa'  => 'required|numeric|min:0',
+            'status'      => 'required|in:kosong,disewa',
+            'keterangan'  => 'nullable|string|max:255',
+        ]);
+        
+        $unit = Unit::findOrFail($id);
+        $unit->update($validated);
+
+        return redirect()
+            ->route('units.index')
+            ->with('success', 'Unit berhasil diperbarui.');
     }
 
     /**
@@ -59,6 +89,14 @@ class UnitController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $unit = Unit::findOrFail($id);
+        // if ($unit->sewas()->count() > 0) {
+        //     return back()->with('error', 'Unit tidak bisa dihapus karena memiliki data sewa.');
+        // }
+        $unit->delete();
+
+        return redirect()
+            ->route('units.index')
+            ->with('success', 'Unit berhasil dihapus.');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,14 +16,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/',[UserController::class, 'index'])->name('login');
+Route::get('/', [UserController::class, 'index'])->name('login');
 Route::post('/', [UserController::class, 'login']);
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 // Route::middleware(['guest'])->group(function () {
 //     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
 // });
+// Route::get('/dashboard', function () {
+//     return view('dashboard.index');
+// });
 
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-});
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware('auth')
+    ->name('dashboard');
+
+// Unit
+Route::resource('/units', UnitController::class);
+

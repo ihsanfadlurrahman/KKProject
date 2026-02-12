@@ -8,6 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Unit extends Model
 {
     use HasFactory;
+    protected $primaryKey = 'id';
+
+    protected $table = 'units'; // Sesuaikan dengan nama tabel
+    protected $fillable = [
+        'nama_unit',
+        'tipe',
+        'harga_sewa',
+        'status',
+        'keterangan'
+    ];
     public function sewas()
     {
         return $this->hasMany(Sewa::class);

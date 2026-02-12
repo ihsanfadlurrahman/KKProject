@@ -2,8 +2,11 @@
 <div class="sidebar">
     <h2>Admin Panel</h2>
     <div class="menu">
-        <a href="#" class="active">Dashboard</a>
-        <a href="#">Unit</a>
+        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
+
+        <a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">
+            Unit
+        </a>
         <a href="#">Penyewa</a>
         <a href="#">Sewa</a>
         <a href="#">Pembayaran</a>
