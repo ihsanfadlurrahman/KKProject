@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penyewa;
+use App\Models\Sewa;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
 class SewaController extends Controller
@@ -11,7 +14,8 @@ class SewaController extends Controller
      */
     public function index()
     {
-        //
+        $sewa = Sewa::with(['penyewa', 'unit'])->latest()->get();
+        return view('sewa.index', compact('sewa'));
     }
 
     /**
@@ -19,7 +23,10 @@ class SewaController extends Controller
      */
     public function create()
     {
-        //
+        $units = Unit::where('status', 'kosong')->get();
+        $penyewa = Penyewa::all();
+
+        return view('sewa.create', compact('units', 'penyewa'));
     }
 
     /**
@@ -27,7 +34,36 @@ class SewaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'unit_id'         => 'required|exists:units,id',
+            'penyewa_id'      => 'required|exists:penyewas,id',
+            'tanggal_mulai'   => 'required|date',
+            'tanggal_selesai' => 'nullable|date|after:tanggal_mulai',
+            'status'          => 'required|in:aktif,selesai',
+        ]);
+
+        // 🔒 Cek apakah unit sudah punya sewa aktif
+        $existingActive = Sewa::where('unit_id', $validated['unit_id'])
+            ->where('status', 'aktif')
+            ->exists();
+
+        if ($existingActive) {
+            return back()
+                ->withInput()
+                ->with('error', 'Unit ini sudah memiliki sewa aktif.');
+        }
+
+        $sewa = Sewa::create($validated);
+
+        // 🔥 Jika status aktif → ubah unit jadi disewa
+        if ($validated['status'] === 'aktif') {
+            Unit::where('id', $validated['unit_id'])
+                ->update(['status' => 'disewa']);
+        }
+
+        return redirect()
+            ->route('sewa.index')
+            ->with('success', 'Data sewa berhasil ditambahkan.');
     }
 
     /**
@@ -41,9 +77,12 @@ class SewaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Sewa $sewa)
     {
-        //
+        $units = Unit::all();
+        $penyewa = Penyewa::all();
+
+        return view('sewa.edit', compact('sewa', 'units', 'penyewa'));
     }
 
     /**
@@ -51,14 +90,71 @@ class SewaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'unit_id'         => 'required|exists:units,id',
+            'penyewa_id'      => 'required|exists:penyewas,id',
+            'tanggal_mulai'   => 'required|date',
+            'tanggal_selesai' => 'nullable|date|after:tanggal_mulai',
+            'status'          => 'required|in:aktif,selesai',
+        ]);
+        $sewa = Sewa::findOrFail($id);
+        // 🔒 Jika mau ubah jadi aktif, pastikan tidak ada aktif lain
+        if ($validated['status'] === 'aktif') {
+
+            $existingActive = Sewa::where('unit_id', $validated['unit_id'])
+                ->where('status', 'aktif')
+                ->where('id', '!=', $sewa->id)
+                ->exists();
+
+            if ($existingActive) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Unit ini sudah memiliki sewa aktif.');
+            }
+        }
+
+        $sewa->update($validated);
+
+        // 🔄 Update status unit berdasarkan status sewa
+        if ($validated['status'] === 'aktif') {
+            Unit::where('id', $validated['unit_id'])
+                ->update(['status' => 'disewa']);
+        } else {
+            Unit::where('id', $validated['unit_id'])
+                ->update(['status' => 'kosong']);
+        }
+
+        return redirect()
+            ->route('sewa.index')
+            ->with('success', 'Data sewa berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Sewa $sewa)
     {
-        //
+        // ❌ Tidak boleh hapus kalau masih aktif
+        if ($sewa->status === 'aktif') {
+            return back()->with('error', 'Data tidak bisa dihapus karena status sewa masih aktif. Ubah ke selesai terlebih dahulu.');
+        }
+
+        $unitId = $sewa->unit_id;
+
+        $sewa->delete();
+
+        // 🔄 Pastikan unit jadi kosong jika tidak ada sewa aktif lain
+        $masihAdaAktif = Sewa::where('unit_id', $unitId)
+            ->where('status', 'aktif')
+            ->exists();
+
+        if (! $masihAdaAktif) {
+            Unit::where('id', $unitId)
+                ->update(['status' => 'kosong']);
+        }
+
+        return redirect()
+            ->route('sewa.index')
+            ->with('success', 'Data sewa berhasil dihapus.');
     }
 }

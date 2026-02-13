@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Sewa extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'id';
+
+    protected $table = 'sewas'; // Sesuaikan dengan nama tabel
+    protected $fillable = [
+        'unit_id',
+        'penyewa_id',
+        'tanggal_mulai',
+        'tanggal_selesai',
+        'status'
+    ];
     public function unit()
     {
         return $this->belongsTo(Unit::class);

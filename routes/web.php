@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PenyewaController;
+use App\Http\Controllers\SewaController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -37,3 +38,6 @@ Route::resource('/units', UnitController::class)->middleware('auth');;
 
 // Penyewa
 Route::resource('/penyewa', PenyewaController::class)->middleware('auth');;
+
+// Sewa
+Route::resource('/sewa', SewaController::class)->middleware('auth');;
