@@ -7,8 +7,10 @@
         <a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">
             Unit
         </a>
-        <a href="#">Penyewa</a>
-        <a href="#">Sewa</a>
+        <a href="{{ route('penyewa.index') }}" class="{{ request()->routeIs('penyewa.*') ? 'active' : '' }}">
+            Penyewa
+        </a>
+        <a href="">Sewa</a>
         <a href="#">Pembayaran</a>
         <a href="#">Pengeluaran</a>
         <a href="{{ route('logout') }}">Logout</a>

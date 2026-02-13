@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Penyewa;
 use Illuminate\Http\Request;
 
 class PenyewaController extends Controller
@@ -11,7 +12,8 @@ class PenyewaController extends Controller
      */
     public function index()
     {
-        //
+        $penyewa = Penyewa::all();
+        return view('penyewa.index', compact('penyewa'));
     }
 
     /**
@@ -19,7 +21,7 @@ class PenyewaController extends Controller
      */
     public function create()
     {
-        //
+        return view('penyewa.create');
     }
 
     /**
@@ -27,7 +29,20 @@ class PenyewaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 1️⃣ Validasi
+        $validated = $request->validate([
+            'nama'   => 'required|string|max:100',
+            'no_hp'  => 'required|string|max:20',
+            'alamat' => 'nullable|string|max:255',
+        ]);
+
+        // 2️⃣ Simpan ke database
+        Penyewa::create($validated);
+
+        // 3️⃣ Redirect + pesan sukses
+        return redirect()
+            ->route('penyewa.index')
+            ->with('success', 'Penyewa berhasil ditambahkan.');
     }
 
     /**
@@ -41,9 +56,9 @@ class PenyewaController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Penyewa $penyewa)
     {
-        //
+        return view('penyewa.edit', compact('penyewa'));
     }
 
     /**
@@ -51,7 +66,18 @@ class PenyewaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'nama'   => 'required|string|max:100',
+            'no_hp'  => 'required|string|max:20',
+            'alamat' => 'nullable|string|max:255',
+        ]);
+
+        $penyewa = Penyewa::findOrFail($id);    
+        $penyewa->update($validated);
+
+        return redirect()
+            ->route('penyewa.index')
+            ->with('success', 'Data penyewa berhasil diperbarui.');
     }
 
     /**
@@ -59,6 +85,12 @@ class PenyewaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $penyewa = Penyewa::findOrFail($id);
+
+        $penyewa->delete();
+
+        return redirect()
+            ->route('penyewa.index')
+            ->with('success', 'Penyewa berhasil dihapus.');
     }
 }
