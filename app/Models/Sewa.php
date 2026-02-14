@@ -29,7 +29,7 @@ class Sewa extends Model
         return $this->belongsTo(Penyewa::class);
     }
 
-    public function pembayarans()
+    public function pembayaran()
     {
         return $this->hasMany(Pembayaran::class);
     }

@@ -42,15 +42,15 @@
         </thead>
 
         <tbody>
-            @forelse($sewa   as $index => $sewa)
+            @forelse($sewa   as $index => $value)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $sewa->penyewa->nama ?? '-' }}</td>
-                    <td>{{ $sewa->unit->nama_unit ?? '-' }}</td>
-                    <td>{{ $sewa->tanggal_mulai }}</td>
-                    <td>{{ $sewa->tanggal_selesai ?? '-' }}</td>
+                    <td>{{ $value->penyewa->nama ?? '-' }}</td>
+                    <td>{{ $value->unit->nama_unit ?? '-' }}</td>
+                    <td>{{ $value->tanggal_mulai }}</td>
+                    <td>{{ $value->tanggal_selesai ?? '-' }}</td>
                     <td>
-                        @if($sewa->status == 'aktif')
+                        @if($value->status == 'aktif')
                             <span style="background:#22c55e; color:#fff; padding:4px 8px; border-radius:6px; font-size:12px;">
                                 Aktif
                             </span>
@@ -64,13 +64,13 @@
                         <div style="display:flex; gap:6px;">
 
                             <!-- Edit -->
-                            <a href="{{ route('sewa.edit', $sewa->id) }}"
+                            <a href="{{ route('sewa.edit', $value->id) }}"
                                style="background:#f59e0b; color:#fff; padding:6px 10px; border-radius:6px; font-size:13px; text-decoration:none;">
                                 Edit
                             </a>
 
                             <!-- Delete -->
-                            <form action="{{ route('sewa.destroy', $sewa->id) }}"
+                            <form action="{{ route('sewa.destroy', $value->id) }}"
                                   method="POST"
                                   onsubmit="return confirm('Yakin ingin menghapus data sewa ini?');"
                                   style="margin:0;">

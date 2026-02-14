@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PenyewaController;
 use App\Http\Controllers\SewaController;
 use App\Http\Controllers\UnitController;
@@ -34,10 +35,13 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 // Unit
-Route::resource('/units', UnitController::class)->middleware('auth');;
+Route::resource('units', UnitController::class)->middleware('auth');;
 
 // Penyewa
-Route::resource('/penyewa', PenyewaController::class)->middleware('auth');;
+Route::resource('penyewa', PenyewaController::class)->middleware('auth');;
 
 // Sewa
-Route::resource('/sewa', SewaController::class)->middleware('auth');;
+Route::resource('sewa', SewaController::class)->middleware('auth');;
+
+// Pembayaran
+Route::resource('pembayaran', PembayaranController::class)->middleware('auth');;

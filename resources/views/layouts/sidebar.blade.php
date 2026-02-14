@@ -11,7 +11,7 @@
             Penyewa
         </a>
         <a href="{{ route('sewa.index') }}" class="{{ request()->routeIs('sewa.*') ? 'active' : '' }}">Sewa</a>
-        <a href="#">Pembayaran</a>
+        <a href="{{ route('pembayaran.index') }}" class="{{ request()->routeIs('pembayaran.*') ? 'active' : '' }}">Pembayaran</a>
         <a href="#">Pengeluaran</a>
         <a href="{{ route('logout') }}">Logout</a>
     </div>

@@ -40,23 +40,23 @@
         </thead>
 
         <tbody>
-            @forelse($penyewa as $index => $penyewa)
+            @forelse($penyewa as $index => $value)
                 <tr>
                     <td>{{ $index + 1 }}</td>
-                    <td>{{ $penyewa->nama }}</td>
-                    <td>{{ $penyewa->no_hp }}</td>
-                    <td>{{ $penyewa->alamat }}</td>
+                    <td>{{ $value->nama }}</td>
+                    <td>{{ $value->no_hp }}</td>
+                    <td>{{ $value->alamat }}</td>
                     <td>
                         <div style="display:flex; gap:6px;">
 
                             <!-- Edit -->
-                            <a href="{{ route('penyewa.edit', $penyewa->id) }}"
+                            <a href="{{ route('penyewa.edit', $value->id) }}"
                                style="background:#f59e0b; color:#fff; padding:6px 10px; border-radius:6px; font-size:13px; text-decoration:none;">
                                 Edit
                             </a>
 
                             <!-- Delete -->
-                            <form action="{{ route('penyewa.destroy', $penyewa->id) }}"
+                            <form action="{{ route('penyewa.destroy', $value->id) }}"
                                   method="POST"
                                   onsubmit="return confirm('Yakin ingin menghapus penyewa ini?');"
                                   style="margin:0;">
