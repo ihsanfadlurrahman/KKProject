@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PenyewaController;
@@ -49,3 +50,11 @@ Route::resource('pembayaran', PembayaranController::class)->middleware('auth');;
 
 // Pengeluaran
 Route::resource('pengeluaran', PengeluaranController::class)->middleware('auth');
+
+// Laporan
+Route::get('laporan', [LaporanController::class, 'index'])
+    ->middleware('auth')
+    ->name('laporan.index');
+Route::get('laporan/pdf', [LaporanController::class, 'exportPdf'])
+    ->middleware('auth')
+    ->name('laporan.pdf');
