@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\PenyewaController;
 use App\Http\Controllers\SewaController;
 use App\Http\Controllers\UnitController;
@@ -45,3 +46,6 @@ Route::resource('sewa', SewaController::class)->middleware('auth');;
 
 // Pembayaran
 Route::resource('pembayaran', PembayaranController::class)->middleware('auth');;
+
+// Pengeluaran
+Route::resource('pengeluaran', PengeluaranController::class)->middleware('auth');

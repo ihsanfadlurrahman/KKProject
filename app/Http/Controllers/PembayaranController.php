@@ -95,13 +95,27 @@ class PembayaranController extends Controller
     public function update(Request $request, Pembayaran $pembayaran)
     {
         $validated = $request->validate([
-            'bulan'        => 'required|date_format:Y-m',
+            'bulan'         => 'required|date_format:Y-m',
             'tanggal_bayar' => 'required|date',
-            'jumlah'       => 'required|numeric|min:0',
+            'jumlah'        => 'required|numeric|min:0',
         ]);
 
+        $bulanFix = $validated['bulan'] . '-01';
+
+        // ❌ Cegah duplicate bulan kecuali record ini sendiri
+        $sudahAda = Pembayaran::where('sewa_id', $pembayaran->sewa_id)
+            ->where('bulan', $bulanFix)
+            ->where('id', '!=', $pembayaran->id)
+            ->exists();
+
+        if ($sudahAda) {
+            return back()
+                ->withInput()
+                ->with('error', 'Pembayaran untuk bulan ini sudah ada.');
+        }
+
         $pembayaran->update([
-            'bulan'         => $validated['bulan'] . '-01',
+            'bulan'         => $bulanFix,
             'tanggal_bayar' => $validated['tanggal_bayar'],
             'jumlah'        => $validated['jumlah'],
         ]);

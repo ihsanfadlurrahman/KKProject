@@ -12,7 +12,7 @@
         </a>
         <a href="{{ route('sewa.index') }}" class="{{ request()->routeIs('sewa.*') ? 'active' : '' }}">Sewa</a>
         <a href="{{ route('pembayaran.index') }}" class="{{ request()->routeIs('pembayaran.*') ? 'active' : '' }}">Pembayaran</a>
-        <a href="#">Pengeluaran</a>
+        <a href="{{ route('pengeluaran.index') }}" class="{{ request()->routeIs('pengeluaran.*') ? 'active' : '' }}">Pengeluaran</a>
         <a href="{{ route('logout') }}">Logout</a>
     </div>
 </div>
