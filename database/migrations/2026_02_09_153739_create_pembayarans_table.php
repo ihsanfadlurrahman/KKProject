@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pembayarans', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('sewa_id')->constrained('sewas')->cascadeOnDelete();
             $table->date('bulan'); // contoh: 2025-01-01
             $table->integer('jumlah');
